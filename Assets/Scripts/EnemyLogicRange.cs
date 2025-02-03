@@ -6,10 +6,10 @@ public class EnemyLogicRange : MonoBehaviour
 {
 
     public float speed = 1.5f;
-    public float detectionRange = 3f;
+    public float detectionRange = 8f;
     public int enemyHP = 50;
     public float attackCooldown = 2f;
-    public float throwForce = 25f;
+    public float throwForce = 3f;
     public GameObject bombPrefab;
     public Transform throwPoint;
 
@@ -84,10 +84,11 @@ public class EnemyLogicRange : MonoBehaviour
         if(bombPrefab != null)
         {
             GameObject bomb = Instantiate(bombPrefab, throwPoint.position, Quaternion.identity);
-            if(enemyRB != null)
+            Rigidbody2D bombRB = bomb.GetComponent<Rigidbody2D>();
+            if(bombRB != null)
             {
                 Vector2 throwDirection = (player.position - throwPoint.position).normalized;
-                enemyRB.velocity = new Vector2(throwDirection.x * throwForce, Mathf.Abs(throwDirection.y * throwForce));
+                bombRB.velocity = new Vector2(throwDirection.x * throwForce, Mathf.Abs(throwDirection.y * throwForce));
             }
         }
         else

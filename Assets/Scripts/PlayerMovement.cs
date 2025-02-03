@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public float playerSpeed = 5f;
     public float jumpForce = 12f;
+    private int collisionDamage = 5;
+    private float bounceForce = 5f;
 
     public Rigidbody2D playerRb;
     private float movementX;
@@ -38,7 +40,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        playerRb.velocity = new Vector2(movementX * playerSpeed, playerRb.velocity.y);
+        if (isGrounded)
+        {
+            playerRb.velocity = new Vector2(movementX * playerSpeed, playerRb.velocity.y);
+        }
     }
 
     private void Jump()
@@ -51,6 +56,11 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+        }
+
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            TakeDamageOnCollision(collision);
         }
     }
 
@@ -74,5 +84,18 @@ public class PlayerMovement : MonoBehaviour
         {
             isGrounded = false;
         }
+    }
+
+    private void TakeDamageOnCollision(Collision2D collision)
+    {
+        PlayerHealth playerHealth = GetComponent<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            playerHealth.TakeDamage(collisionDamage);
+        }
+
+        Vector2 bounceDirection = (transform.position - collision.transform.position).normalized;
+        playerRb.velocity = new Vector2(playerRb.velocity.x, 0);
+        playerRb.AddForce(new Vector2(bounceDirection.x * bounceForce, bounceForce), ForceMode2D.Impulse);
     }
 }

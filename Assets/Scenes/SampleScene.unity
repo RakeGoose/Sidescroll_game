@@ -498,6 +498,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1129272849}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &170592939 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1352371072249652273, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
+  m_PrefabInstance: {fileID: 3693939445759577269}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &480494048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,7 +1060,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 50
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -1563,6 +1568,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1599791749 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6670062885360443213, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
+  m_PrefabInstance: {fileID: 3693939445759577269}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1633206682
 GameObject:
   m_ObjectHideFlags: 0
@@ -1719,7 +1729,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352371072249652273, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.52
+      value: 0.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 1352371072249652273, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.26
       objectReference: {fileID: 0}
     - target: {fileID: 1814095761511268525, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
       propertyPath: player
@@ -1729,6 +1743,26 @@ PrefabInstance:
       propertyPath: bombPrefab
       value: 
       objectReference: {fileID: 2282825755654951878, guid: 2ffad6f1de06649abaf5dea77e80eb2c, type: 3}
+    - target: {fileID: 1814095761511268525, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
+      propertyPath: throwForce
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1814095761511268525, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
+      propertyPath: throwPoint
+      value: 
+      objectReference: {fileID: 170592939}
+    - target: {fileID: 1814095761511268525, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
+      propertyPath: detectionRange
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1814095761511268525, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
+      propertyPath: groundDetection
+      value: 
+      objectReference: {fileID: 1599791749}
+    - target: {fileID: 1814095761511268525, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
+      propertyPath: groundLayers.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 8323714341178557256, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
       propertyPath: m_Name
       value: 'Enemy (Range) '
