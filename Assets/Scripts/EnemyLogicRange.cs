@@ -2,27 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyLogic : MonoBehaviour
+public class EnemyLogicRange : MonoBehaviour
 {
 
-    public float speed = 2f;
-    public float detectionRange = 0.5f;
-    public float attackCooldown = 1.5f;
-    private int enemyHP = 100;
-    public int attackDamage = 20;
+    public float speed = 1.5f;
+    public float detectionRange = 3f;
+    public int enemyHP = 50;
+    public float attackCooldown = 2f;
+    public float throwForce = 25f;
+    public GameObject bombPrefab;
+    public Transform throwPoint;
 
-    public Rigidbody2D enemyRB;
-    private bool movingRight = true;
-    private bool isAttacking = false;
-    
-    
     public Transform player;
     public Transform groundDetection;
     public LayerMask groundLayers;
 
-    
+    private Rigidbody2D enemyRB;
+    private bool movingRight = true;
+    private bool isAttacking = false;
 
-    private void Start()
+    void Start()
     {
         enemyRB = GetComponent<Rigidbody2D>();
     }
@@ -34,12 +33,12 @@ public class EnemyLogic : MonoBehaviour
             Patrol();
         }
 
-        if (Vector2.Distance(transform.position, player.position) < detectionRange && !isAttacking)
+        if(Vector2.Distance(transform.position, player.position) < detectionRange && !isAttacking)
         {
-            
+
             StartCoroutine(PrepareAttack());
+
         }
-        
     }
 
     void Patrol()
@@ -54,8 +53,6 @@ public class EnemyLogic : MonoBehaviour
 
     }
 
-    
-
     void Flip()
     {
         movingRight = !movingRight;
@@ -66,29 +63,40 @@ public class EnemyLogic : MonoBehaviour
     {
         isAttacking = true;
         enemyRB.velocity = Vector2.zero;
-        Debug.Log("Enemy Preparing Attack");
-     
+        Debug.Log("Range Enemy Preparing Attack");
+
         yield return new WaitForSeconds(attackCooldown);
 
-        
+
 
         if (Vector2.Distance(transform.position, player.position) < detectionRange)
         {
-            Attack();
+            ThrowBomb();
         }
         else
         {
-            
             isAttacking = false;
         }
     }
 
-    void Attack()
+    void ThrowBomb()
     {
-        Debug.Log("Enemy attack");
-        player.GetComponent<PlayerHealth>()?.TakeDamage(attackDamage);
+        if(bombPrefab != null)
+        {
+            GameObject bomb = Instantiate(bombPrefab, throwPoint.position, Quaternion.identity);
+            if(enemyRB != null)
+            {
+                Vector2 throwDirection = (player.position - throwPoint.position).normalized;
+                enemyRB.velocity = new Vector2(throwDirection.x * throwForce, Mathf.Abs(throwDirection.y * throwForce));
+            }
+        }
+        else
+        {
+            Debug.LogError("Bomb Prefab is missing! Assing it");
+        }
 
-        if (Vector2.Distance(transform.position, player.position) < detectionRange)
+        
+        if(Vector2.Distance(transform.position, player.position) < detectionRange)
         {
             StartCoroutine(PrepareAttack());
         }
@@ -96,8 +104,8 @@ public class EnemyLogic : MonoBehaviour
         {
             isAttacking = false;
         }
+        
     }
-
 
     public void TakeDamage(int damage)
     {
@@ -107,5 +115,4 @@ public class EnemyLogic : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
 }

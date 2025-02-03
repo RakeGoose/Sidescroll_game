@@ -10,6 +10,10 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D playerRb;
     private float movementX;
     private bool isGrounded;
+    private bool movingRight = true;
+
+    public Transform groundCheck;
+    public LayerMask groundLayers;
 
     private void Start()
     {
@@ -27,6 +31,9 @@ public class PlayerMovement : MonoBehaviour
                 Jump();
             }
         }
+
+        Flip();
+
     }
 
     private void FixedUpdate()
@@ -44,6 +51,20 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+        }
+    }
+
+    void Flip()
+    {
+        if (movementX > 0 && !movingRight)
+        {
+            movingRight = true;
+            transform.Rotate(0f, 180f, 0f);
+        }
+        else if(movementX < 0 && movingRight)
+        {
+            movingRight = false;
+            transform.Rotate(0f, 180f, 0f);
         }
     }
 
