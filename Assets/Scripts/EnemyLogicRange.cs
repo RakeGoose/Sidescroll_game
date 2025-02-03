@@ -56,7 +56,7 @@ public class EnemyLogicRange : MonoBehaviour
     void Flip()
     {
         movingRight = !movingRight;
-        transform.eulerAngles = new Vector3(0, movingRight ? 0 : 180, 0);
+        transform.eulerAngles = new Vector2(0, movingRight ? 0 : 180);
     }
 
     IEnumerator PrepareAttack()
