@@ -12,9 +12,16 @@ public class PlayerHealth : MonoBehaviour
 
     public Slider healthBar;
     public Text livesText;
+    private Animator animator;
+    private Vector2 lastDeathPosition;
+
+    public bool isDead = false;
+
+    public float respawnDelay = 2f;
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         currentHealth = maxHealth;
         UpdateUI();
     }
@@ -22,20 +29,77 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (isDead)
+        {
+            return;
+        }
+
         currentHealth -= damage;
+        UpdateUI();
         if (currentHealth <= 0)
         {
             lives--;
+
             if(lives <= 0)
             {
-                Debug.Log("Game OVER");
+                Die();
             }
             else
             {
-                currentHealth = maxHealth;
+                StartCoroutine(Respawn());
             }
         }
+    }
+
+    private void Die()
+    {
+        isDead = true;
+        lastDeathPosition = transform.position;
+        animator.SetTrigger("dieAnimation");
+        DisablePlayerControls();
+
+        StartCoroutine(GameOver());
+    }
+
+    private IEnumerator Respawn()
+    {
+        isDead = true;
+        animator.SetTrigger("dieAnimation");
+        DisablePlayerControls();
+
+        yield return new WaitForSeconds(respawnDelay);
+
+        animator.Play("dieAnimation", 0, 1f);
+        animator.SetFloat("dieAnimationSpeed", 0.2f);
+
+        yield return new WaitForSeconds(1f);
+
+        animator.SetFloat("dieAnimationSpeed", 0.2f);
+        transform.position = lastDeathPosition;
+        currentHealth = maxHealth;
+        isDead = false;
         UpdateUI();
+
+        EnablePlayerControls();
+    }
+
+    private IEnumerator GameOver()
+    {
+        yield return new WaitForSeconds(2f);
+        Debug.Log("Game OVER");
+    }
+
+    private void DisablePlayerControls()
+    {
+        GetComponent<PlayerMovement>().enabled = false;
+        GetComponent<PlayerCombat>().enabled = false;
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+    }
+
+    private void EnablePlayerControls()
+    {
+        GetComponent<PlayerMovement>().enabled = true;
+        GetComponent<PlayerCombat>().enabled = true;
     }
 
     void UpdateUI()

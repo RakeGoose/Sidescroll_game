@@ -10,9 +10,11 @@ public class PlayerMovement : MonoBehaviour
     private float bounceForce = 5f;
 
     public Rigidbody2D playerRb;
+    private Animator animator;
     private float movementX;
     private bool isGrounded;
     private bool movingRight = true;
+    public float airControlFactor = 0.8f;
 
     public Transform groundCheck;
     public LayerMask groundLayers;
@@ -20,11 +22,27 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         playerRb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
         movementX = Input.GetAxisRaw("Horizontal");
+
+        bool isMoving = movementX != 0;
+        animator.SetBool("IsMoving", isMoving);
+
+        animator.SetBool("IsJumping", !isGrounded && playerRb.velocity.y > 0);
+        animator.SetBool("IsFalling", !isGrounded && playerRb.velocity.y < 0);
+
+        if (movementX > 0 && !movingRight)
+        {
+            Flip();
+        }
+        else if (movementX < 0 && movingRight)
+        {
+            Flip();
+        }
 
         if (Input.GetButtonDown("Vertical") || Input.GetButtonDown("Jump"))
         {
@@ -33,17 +51,18 @@ public class PlayerMovement : MonoBehaviour
                 Jump();
             }
         }
-
-        Flip();
-
     }
 
     private void FixedUpdate()
     {
-        if (isGrounded)
+        float currentSpeed = playerSpeed;
+
+        if (!isGrounded)
         {
-            playerRb.velocity = new Vector2(movementX * playerSpeed, playerRb.velocity.y);
+            currentSpeed *= airControlFactor;
         }
+
+        playerRb.velocity = new Vector2(movementX * currentSpeed, playerRb.velocity.y);
     }
 
     private void Jump()
@@ -66,16 +85,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Flip()
     {
-        if (movementX > 0 && !movingRight)
-        {
-            movingRight = true;
-            transform.Rotate(0f, 180f, 0f);
-        }
-        else if(movementX < 0 && movingRight)
-        {
-            movingRight = false;
-            transform.Rotate(0f, 180f, 0f);
-        }
+        movingRight = !movingRight;
+        transform.Rotate(0f, 180f, 0f);
     }
 
     private void OnCollisionExit2D(Collision2D collision)

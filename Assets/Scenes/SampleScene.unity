@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 56612528}
   - component: {fileID: 56612529}
   - component: {fileID: 56612530}
+  - component: {fileID: 56612531}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -333,18 +334,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.048746318}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 1.1428572, y: 1.1428572}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 1.0974927}
   m_EdgeRadius: 0
 --- !u!212 &56612526
 SpriteRenderer:
@@ -387,7 +388,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: f5675628e5c624558b91d6f7e57e7647, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d284509055ca9479fbcc69f41ef3ec9a, type: 3}
   m_Color: {r: 0.9622642, g: 0.12255252, b: 0.12255252, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -429,6 +430,7 @@ MonoBehaviour:
   playerSpeed: 10
   jumpForce: 12
   playerRb: {fileID: 56612524}
+  airControlFactor: 0.8
   groundCheck: {fileID: 0}
   groundLayers:
     serializedVersion: 2
@@ -451,6 +453,8 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 128
+  attackLift: 0.6
+  colliderDrop: 0.6
 --- !u!114 &56612530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,6 +471,29 @@ MonoBehaviour:
   lives: 2
   healthBar: {fileID: 1172130584}
   livesText: {fileID: 480494050}
+  isDead: 0
+  respawnDelay: 2
+--- !u!95 &56612531
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56612523}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2fff76ddc960c4754981d2c40d65e2ec, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &95708192
 GameObject:
   m_ObjectHideFlags: 0
@@ -537,7 +564,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -456, y: 216}
+  m_AnchoredPosition: {x: -531, y: 161}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &480494050
@@ -594,6 +621,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -719,6 +747,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6713ea3e9b904c389e35ff7c4b049d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+  zDistance: 10
+  allowableOffset: 3
+  player: {fileID: 56612523}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1019,6 +1063,7 @@ GameObject:
   - component: {fileID: 1129272847}
   - component: {fileID: 1129272846}
   - component: {fileID: 1129272845}
+  - component: {fileID: 1129272850}
   m_Layer: 7
   m_Name: Enemy (Melee)
   m_TagString: Enemy
@@ -1039,7 +1084,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  detectionRange: 5
+  detectionRange: 2
   attackCooldown: 1.5
   attackDamage: 20
   enemyRB: {fileID: 1129272846}
@@ -1107,9 +1152,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.1137414}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.6137414
 --- !u!212 &1129272848
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1151,8 +1196,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.87092453, g: 0, b: 0.9528302, a: 1}
+  m_Sprite: {fileID: -1558462405, guid: 64a077ff35eb345f8852b55de37d9932, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1178,6 +1223,27 @@ Transform:
   - {fileID: 95708193}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1129272850
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129272844}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c9c42c446d3c0449d8cf9c8706c9858f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1172130582
 GameObject:
   m_ObjectHideFlags: 0
@@ -1213,7 +1279,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -647, y: 215}
+  m_AnchoredPosition: {x: -718, y: 160}
   m_SizeDelta: {x: 201.2115, y: 34.825}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1172130584
@@ -1745,7 +1811,7 @@ PrefabInstance:
       objectReference: {fileID: 2282825755654951878, guid: 2ffad6f1de06649abaf5dea77e80eb2c, type: 3}
     - target: {fileID: 1814095761511268525, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
       propertyPath: throwForce
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1814095761511268525, guid: 08092969ffd644f82a76b79d7a51f41e, type: 3}
       propertyPath: throwPoint

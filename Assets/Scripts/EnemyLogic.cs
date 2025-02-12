@@ -20,11 +20,13 @@ public class EnemyLogic : MonoBehaviour
     public Transform groundDetection;
     public LayerMask groundLayers;
 
-    
+    private Animator animator;
+    private Coroutine attackCoroutine;
 
     private void Start()
     {
         enemyRB = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -37,13 +39,16 @@ public class EnemyLogic : MonoBehaviour
         if (Vector2.Distance(transform.position, player.position) < detectionRange && !isAttacking)
         {
             
-            StartCoroutine(PrepareAttack());
+            attackCoroutine = StartCoroutine(PrepareAttack());
         }
         
     }
 
     void Patrol()
     {
+        animator.SetBool("IsMoving", true);
+        animator.SetBool("PreparingAttack", false);
+
         enemyRB.velocity = new Vector2(movingRight ? speed : -speed, enemyRB.velocity.y);
 
         RaycastHit2D groundInfo = Physics2D.Raycast(groundDetection.position, Vector2.down, 1f, groundLayers);
@@ -66,46 +71,72 @@ public class EnemyLogic : MonoBehaviour
     {
         isAttacking = true;
         enemyRB.velocity = Vector2.zero;
-        Debug.Log("Enemy Preparing Attack");
+        animator.SetBool("IsMoving", false);
+        animator.SetBool("PreparingAttack", true);
+        
      
         yield return new WaitForSeconds(attackCooldown);
+
+        animator.SetBool("PreparingAttack", false);
 
         
 
         if (Vector2.Distance(transform.position, player.position) < detectionRange)
         {
-            Attack();
+            attackCoroutine = StartCoroutine(AttackSequence());
         }
         else
         {
-            
             isAttacking = false;
         }
     }
 
-    void Attack()
+    IEnumerator AttackSequence()
     {
-        Debug.Log("Enemy attack");
-        player.GetComponent<PlayerHealth>()?.TakeDamage(attackDamage);
+        animator.SetTrigger("Attack");
+
+        yield return new WaitForSeconds(0.5f);
 
         if (Vector2.Distance(transform.position, player.position) < detectionRange)
         {
-            StartCoroutine(PrepareAttack());
+            player.GetComponent<PlayerHealth>()?.TakeDamage(attackDamage);
         }
-        else
-        {
-            isAttacking = false;
-        }
-    }
 
+        isAttacking = false;
+    }
 
     public void TakeDamage(int damage)
     {
         enemyHP -= damage;
+        animator.SetTrigger("TakeDamage");
+
+        if(attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+            isAttacking = false;
+            animator.SetBool("PreparingAttack", false);
+        }
+
         if(enemyHP <= 0)
         {
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    void Die()
+    {
+        animator.SetTrigger("Die");
+        enemyRB.velocity = Vector2.zero;
+        isAttacking = true;
+
+        StartCoroutine(DestroyAfterAnimation());
+    }
+
+    IEnumerator DestroyAfterAnimation()
+    {
+        yield return new WaitForSeconds(2f);
+        Destroy(gameObject);
     }
 
 }

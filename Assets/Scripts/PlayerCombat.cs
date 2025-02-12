@@ -8,12 +8,31 @@ public class PlayerCombat : MonoBehaviour
     public float attackRange = 1f;
     public int meleeDamage = 25;
     public LayerMask enemyLayers;
-    
-     void Update()
+    private float attackCooldown = 0.5f;
+
+    private Animator animator;
+    private bool isAttacking = false;
+
+    private Vector3 preAttackPosition;
+    private Vector2 originalColliderOffset;
+    private BoxCollider2D boxCollider;
+
+    public float attackLift = 0.6f;
+    public float colliderDrop = 0.6f;
+
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        animator = GetComponent<Animator>();
+        boxCollider = GetComponent<BoxCollider2D>();
+
+        originalColliderOffset = boxCollider.offset;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !isAttacking)
         {
-            MeleeAtack();
+            StartCoroutine(PerformAttack());
         }
     }
 
@@ -26,6 +45,28 @@ public class PlayerCombat : MonoBehaviour
             enemy.GetComponent<EnemyLogicRange>()?.TakeDamage(meleeDamage);
         }
 
+    }
+
+    private IEnumerator PerformAttack()
+    {
+        isAttacking = true;
+        animator.SetTrigger("Attack");
+
+        preAttackPosition = transform.position;
+
+        transform.position += Vector3.up * attackLift;
+        boxCollider.offset = new Vector2(originalColliderOffset.x, originalColliderOffset.y - colliderDrop);
+
+        yield return new WaitForSeconds(0.15f);
+
+        MeleeAtack();
+
+        yield return new WaitForSeconds(attackCooldown - 0.15f);
+
+        transform.position = preAttackPosition;
+        boxCollider.offset = originalColliderOffset;
+
+        isAttacking = false;
     }
 
     void OnDrawGizmosSelected()
