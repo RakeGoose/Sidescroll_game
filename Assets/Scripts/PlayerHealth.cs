@@ -23,6 +23,29 @@ public class PlayerHealth : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         currentHealth = maxHealth;
+        GameObject healthBarObj = GameObject.FindGameObjectWithTag("HealthBar");
+        if (healthBarObj != null)
+        {
+            healthBar = healthBarObj.GetComponent<Slider>();
+        }
+        else
+        {
+            Debug.LogError("Error");
+        }
+
+        if (livesText == null)
+        {
+            GameObject livesTextObj = GameObject.FindGameObjectWithTag("Lives");
+            if(livesTextObj != null)
+            {
+                livesText = livesTextObj.GetComponent<Text>();
+            }
+            else
+            {
+                Debug.LogError("Error");
+            }
+        }
+
         UpdateUI();
     }
 
@@ -104,7 +127,14 @@ public class PlayerHealth : MonoBehaviour
 
     void UpdateUI()
     {
-        healthBar.value = (float)currentHealth / maxHealth;
-        livesText.text = "Lives: " + lives;
+        if(healthBar != null)
+        {
+            healthBar.value = (float)currentHealth / maxHealth;
+        }
+
+        if(livesText != null)
+        {
+            livesText.text = "Lives: " + lives;
+        }
     }
 }

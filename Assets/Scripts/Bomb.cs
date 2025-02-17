@@ -9,12 +9,31 @@ public class Bomb : MonoBehaviour
     public int damage = 15;
     public float acidZoneDuration = 2f;
 
+    private Animator animator;
+    private bool hasExploded = false;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     void Explode()
     {
+        if (!hasExploded)
+        {
+            hasExploded = true;
+            animator.SetTrigger("Explode");
+            StartCoroutine(SpawnAcidZone());
+        }
+    }
+
+    IEnumerator SpawnAcidZone()
+    {
+        yield return new WaitForSeconds(0.5f);
+
         if(acidZonePrefab != null)
         {
             GameObject acidZone = Instantiate(acidZonePrefab, transform.position, Quaternion.identity);
-            Destroy(acidZone, acidZoneDuration);
         }
         else
         {

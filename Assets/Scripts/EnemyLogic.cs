@@ -15,31 +15,60 @@ public class EnemyLogic : MonoBehaviour
     private bool movingRight = true;
     private bool isAttacking = false;
     
-    
-    public Transform player;
     public Transform groundDetection;
     public LayerMask groundLayers;
 
+    private Transform player;
     private Animator animator;
     private Coroutine attackCoroutine;
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
 
     private void Start()
     {
         enemyRB = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        originalColor = spriteRenderer.color;
+
+        StartCoroutine(FindPlayer());
+    }
+
+    IEnumerator FindPlayer()
+    {
+        while (player == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                player = playerObj.transform;
+                Debug.Log("Error");
+            }
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     void Update()
     {
-        if (!isAttacking)
+        if (player == null)
         {
-            Patrol();
+            return;
         }
 
-        if (Vector2.Distance(transform.position, player.position) < detectionRange && !isAttacking)
+
+        if (Vector2.Distance(transform.position, player.position) < detectionRange)
         {
-            
-            attackCoroutine = StartCoroutine(PrepareAttack());
+
+            LookAtPlayer();
+            if (!isAttacking)
+            {
+                attackCoroutine = StartCoroutine(PrepareAttack());
+            }
+        }
+        else if (!isAttacking)
+        {
+            Patrol();
         }
         
     }
@@ -65,6 +94,25 @@ public class EnemyLogic : MonoBehaviour
     {
         movingRight = !movingRight;
         transform.eulerAngles = new Vector2(0, movingRight ? 0 : 180);
+    }
+
+    void LookAtPlayer()
+    {
+        if (player == null)
+        {
+            return;
+        }
+
+        bool playerIsRight = player.position.x > transform.position.x;
+
+        if(playerIsRight && !movingRight)
+        {
+            Flip();
+        }
+        else if(!playerIsRight && movingRight)
+        {
+            Flip();
+        }
     }
 
     IEnumerator PrepareAttack()
@@ -105,10 +153,18 @@ public class EnemyLogic : MonoBehaviour
         isAttacking = false;
     }
 
+    IEnumerator FlashWhite()
+    {
+        spriteRenderer.color = Color.white;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = originalColor;
+    }
+
     public void TakeDamage(int damage)
     {
         enemyHP -= damage;
         animator.SetTrigger("TakeDamage");
+        StartCoroutine(FlashWhite());
 
         if(attackCoroutine != null)
         {

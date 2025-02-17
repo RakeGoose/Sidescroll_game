@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 7025095939318127496}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.67, y: 1.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 1367903642277191365}
   - component: {fileID: 681579051805246189}
   - component: {fileID: 1814095761511268525}
+  - component: {fileID: 1733501621190337108}
   m_Layer: 7
   m_Name: 'Enemy (Range) '
   m_TagString: Enemy
@@ -90,8 +91,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8323714341178557256}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22.17, y: 0.81794536, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 11.190785, y: 0.5816784, z: 0.08319556}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -139,9 +140,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0, g: 0.0068511963, b: 1, a: 1}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 1472854503, guid: 10a71d138bb2b4784a079b427795f304, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -183,9 +184,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.041344345, y: -0.2584026}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.4483192
 --- !u!50 &681579051805246189
 Rigidbody2D:
   serializedVersion: 4
@@ -226,14 +227,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1.5
-  detectionRange: 25
+  detectionRange: 8
   enemyHP: 50
   attackCooldown: 2
   throwForce: 7
-  bombPrefab: {fileID: 0}
-  throwPoint: {fileID: 0}
-  player: {fileID: 0}
-  groundDetection: {fileID: 0}
+  bombPrefab: {fileID: 2282825755654951878, guid: 2ffad6f1de06649abaf5dea77e80eb2c, type: 3}
+  throwPoint: {fileID: 1352371072249652273}
+  player: {fileID: 5623716734695009847, guid: 0a98822ba607040ceb7ff74943c601cb, type: 3}
+  groundDetection: {fileID: 6670062885360443213}
   groundLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
+--- !u!95 &1733501621190337108
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8323714341178557256}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6088a57dddaeb468783910598126dcd3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

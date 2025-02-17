@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7956816867161618179}
   - component: {fileID: 8787776300909351082}
   - component: {fileID: 7060076043546453970}
+  - component: {fileID: 3068100620476475140}
   m_Layer: 0
   m_Name: Toxic Bomb
   m_TagString: Untagged
@@ -75,9 +76,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 0.01886791, g: 0.01886791, b: 0.01886791, a: 1}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 747d3b9fdd13349c494bcc87e773550c, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -164,3 +165,24 @@ MonoBehaviour:
   acidZonePrefab: {fileID: 1226431077841544980, guid: 4e6ed69b1dac549b29bce318e685ab6b, type: 3}
   damage: 15
   acidZoneDuration: 2
+--- !u!95 &3068100620476475140
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2282825755654951878}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3bf85af4438f540fabca7c7b62b1b7fd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -30,7 +30,7 @@ public class PlayerCombat : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !isAttacking)
+        if (Input.GetKeyDown(KeyCode.E) && !isAttacking)
         {
             StartCoroutine(PerformAttack());
         }
@@ -52,10 +52,9 @@ public class PlayerCombat : MonoBehaviour
         isAttacking = true;
         animator.SetTrigger("Attack");
 
-        preAttackPosition = transform.position;
+        
 
-        transform.position += Vector3.up * attackLift;
-        boxCollider.offset = new Vector2(originalColliderOffset.x, originalColliderOffset.y - colliderDrop);
+        
 
         yield return new WaitForSeconds(0.15f);
 
@@ -63,8 +62,7 @@ public class PlayerCombat : MonoBehaviour
 
         yield return new WaitForSeconds(attackCooldown - 0.15f);
 
-        transform.position = preAttackPosition;
-        boxCollider.offset = originalColliderOffset;
+        
 
         isAttacking = false;
     }
